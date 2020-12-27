@@ -16,10 +16,12 @@ Release Downloads: [Register & Download DLL Injector Here ](https://guidedhackin
 * SetWindowsHookEx
 * QueueUserAPC
 
+**Bug Reports**
+Post all bug reports & issues on the forum [here](https://guidedhacking.com/threads/guidedhacking-dll-injector.8417/)
+
 **Requirements**
 
 Windows 10 1809 or above
-
 
 **Description**
 
