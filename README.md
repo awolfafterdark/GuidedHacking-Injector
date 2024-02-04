@@ -1,7 +1,7 @@
 # GuidedHacking Injector
 Fully Featured DLL Injector made by [Broihon](https://guidedhacking.com/members/broihon.49430/) for Guided Hacking
 
-**This is our old v3.3 source code, the new v4.4+ repo is here: [Broihon - GH-Injector-Library](https://github.com/Broihon/GH-Injector-Library)**
+**This repo doesn't contain the compiled binaries, just the source code for the library. If you want the compiled program, you must be a paying customer on our website where you can download it.**
 
 Release Downloads: [Register & Download DLL Injector Here ](https://guidedhacking.com/resources/guided-hacking-dll-injector.4/)
 
