@@ -1,79 +1,149 @@
-# GuidedHacking Injector
-Fully Featured DLL Injector made by [Broihon](https://guidedhacking.com/members/broihon.49430/) for Guided Hacking
+# GuidedHacking Injector Library
+
+A feature-rich DLL injection library which supports x86, WOW64 and x64 injections.
+Developed by [Broihon](https://guidedhacking.com/members/broihon.49430/) for Guided Hacking.
+It features five injection methods, six  shellcode execution methods and various additional options.
+Session separation can be bypassed with all methods.
+
+If you want to use this library with a GUI check out the [GH Injector GUI](https://github.com/Broihon/GH-Injector-GUI).
 
 Release Downloads: [Register & Download DLL Injector Here ](https://guidedhacking.com/resources/guided-hacking-dll-injector.4/)
 
 ![](https://i.gyazo.com/23b497942ade7bc6a13b2d7029567c6b.png)
 
-**This repo doesn't contain the compiled binaries, just the source code for the library. If you want the compiled program, you must be a paying customer on our website where you can download it. You do not have permission/license to distribute the compiled binaries or any of our other content from our website.**
+**This repo doesn't contain the compiled binaries, just the source code for the library. If you want to download the compiled program, you must be a paying customer on our website where you can download it. If you can compile it yourself and get it working, then great, enjoy it, but you do not have permission/license to distribute the compiled binaries or any of our other content from our website.**
 
-**Injection Methods:**
-* LoadLibrary
-* LdrLoadDll Stub
-* Manual Mapping
+----
 
-**Launch Methods:**
-* NtCreateThreadEx
-* Thread Hijacking
-* SetWindowsHookEx
-* QueueUserAPC
+### Injection methods
 
-**Requirements**
+- LoadLibraryExW
+- LdrLoadDll
+- LdrpLoadDll
+- LdrpLoadDllInternal
+- ManualMapping
 
-Windows 10 1809 or above
+### Shellcode execution methods
 
-**Description**
+- NtCreateThreadEx
+- Thread hijacking
+- SetWindowsHookEx
+- QueueUserAPC
+- KernelCallback
+- FakeVEH
 
-* Compatible with both 32-bit and 64-bit programs
-* Settings of the GUI are saved to a local ini file
-* Processes can be selected by name or process ID and by the fancy process picker.
+### Manual mapping features:
 
-# GH Injector Library
+- Section mapping
+- Base relocation
+- Imports
+- Delayed imports
+- SEH support
+- TLS initialization
+- Security cookie initalization
+- Loader Lock
+- Shift image
+- Clean datadirectories
 
-Since GH Injector V3.0 the actual injector has been converted in to a library
+### Additional features:
 
-To use it in your applications you can either use InjectA (ansi) or 
-InjectW (unicode) which are the two functions exported by the "GH 
-Injector - x86.dll" and "GH Injector - x64.dll".
+- Various cloaking options
+	- PEB unlinking
+	- PE header cloaking
+	- Thread cloaking
+- Handle hijacking
+- Hook scanning/restoring
 
-These functions take a pointer to a INJECTIONDATAA/INJECTIONDATAW structure. For more the 
-struct definition / enums / flags check "Injection.h".
+----
 
-How To Use GH Injector & Source Code Review: https://youtu.be/zhA9kSCY3Ec
+### Getting started
 
-# FAQ
-* It's not a virus, it is packed with UPX and uses Autoit, according to most antivirus software that means it's a virus.
-* It connects to the internet to check for updates
+You can easily use mapper by including the compiled binaries in your project. Check the provided Injection.h header for more information.
+Make sure you have the compiled binaries in the working directory of your program.
+On first run the injection module has to download PDB files for the native (and when run on x64 the wow64) version of the ntdll.dll to resolve symbol addresses. Use the exported StartDownload function to begin the download.
+The injector can only function if the downloads are finished. The injection module exports GetSymbolState and GetImportState which will return INJ_ERROR_SUCCESS (0) if the PDB download and resolving of all required addresses is completed.
+Additionally GetDownloadProgress can be used to determine the progress of the download as percentage. If the injection module is to be unloaded during the download process call InterruptDownload or there's a chance that the dll will deadlock your process.
 
+```cpp
 
-# How to Build from Source
+#include "Injection.h"
 
-Compile "GH Injector Library\GH Injector Library.sln" with these steps:
-1. Open the project
-2. Click "Build" in the menubar
-3. Click "Batch Build"
-4. Tick all 4 release builds (Configuration = Release)
-5. Click "Build"
-6. Done
+HINSTANCE hInjectionMod = LoadLibrary(GH_INJ_MOD_NAME);
+	
+auto InjectA = (f_InjectA)GetProcAddress(hInjectionMod, "InjectA");
+auto GetSymbolState = (f_GetSymbolState)GetProcAddress(hInjectionMod, "GetSymbolState");
+auto GetImportState = (f_GetSymbolState)GetProcAddress(hInjectionMod, "GetImportState");
+auto StartDownload = (f_StartDownload)GetProcAddress(hInjectionMod, "StartDownload");
+auto GetDownloadProgressEx = (f_GetDownloadProgressEx)GetProcAddress(hInjectionMod, "GetDownloadProgressEx");
 
-Install AutoIt - It is Required to compile GUI - https://www.autoitscript.com/site/autoit/downloads/
+//due to a minor bug in the current version you have to wait a bit before starting the download
+	//will be fixed in version 4.7
+Sleep(500);
 
+StartDownload();
 
-Run CompileAndMerge.bat
+//since GetSymbolState and GetImportState only return after the downloads are finished 
+	//checking the download progress is not necessary
+while (GetDownloadProgressEx(PDB_DOWNLOAD_INDEX_NTDLL, false) != 1.0f)
+{
+	Sleep(10);
+}
 
-It will compile the AutoIt files and merge all the required files into "GH Injector\".
+#ifdef _WIN64
+while (GetDownloadProgressEx(PDB_DOWNLOAD_INDEX_NTDLL, true) != 1.0f)
+{
+	Sleep(10);
+}
+#endif
 
-To run the GH Injector simply open "GH Injector\GH Injector.exe".
+while (GetSymbolState() != 0)
+{
+	Sleep(10);
+}
 
-# Credits
+while (GetImportState() != 0)
+{
+	Sleep(10);
+}
 
-For the Manual Mapping a lot of credits go to [Joachim Bauch](https://www.joachim-bauch.de/tutorials/loading-a-dll-from-memory/).  I highly recommend you to go there and take a look if you're interested in Manual Mapping and the PE format itself.
+DWORD TargetProcessId;
 
-The windows structures I use for the unlinking process are mostly inspired by [this site](https://sandsprite.com/CodeStuff/Understanding_the_Peb_Loader_Data_List.html) which is also a very interesting read.
+INJECTIONDATAA data =
+{
+	"",
+	TargetProcessId,
+	INJECTION_MODE::IM_LoadLibraryExW,
+	LAUNCH_METHOD::LM_NtCreateThreadEx,
+	NULL,
+	0,
+	NULL,
+	NULL,
+	true
+};
 
-I also want to credit Anton Bruckner and Dmitri Shostakovich because most of the time coding this I listened to their fantastic music which is probably one of the reasons why this took me way too long.
+strcpy(data.szDllPath, DllPathToInject);
 
-<h3>Official GH Courses</h3>
+InjectA(&data);
+
+```
+
+---
+
+### Credits
+
+First of all I want to credit Joachim Bauch whose Memory Module Library was a great source to learn from:  
+https://github.com/fancycode/MemoryModule
+
+He also made a great write-up explaining the basics of mapping a module:  
+https://www.joachim-bauch.de/tutorials/loading-a-dll-from-memory/
+
+I also want to thank Akaion/Dewera for helping me with SEH support and their C# mapping library which was another great resource to learn from:  
+https://github.com/Dewera/Lunar
+
+Big thanks to mambda who made this PDB parser which I could steal code from to verify GUIDs:  
+https://bitbucket.org/mambda/pdb-parser/src/master/
+
+<h3>Official Guided Hacking Courses</h3>
 <ul>
 	<li><a href="https://guidedhacking.com/ghb" target="_blank">The Game Hacking Bible</a>&nbsp;- a massive 70 chapter Game Hacking Course</li>
 	<li><a href="https://guidedhacking.com/threads/squally-cs420-game-hacking-course.14191/" target="_blank">Computer Science 420</a>&nbsp;- an eight chapter lecture on CS, Data Types &amp; Assembly</li>
