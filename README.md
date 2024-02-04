@@ -1,11 +1,10 @@
 # GuidedHacking Injector
 Fully Featured DLL Injector made by [Broihon](https://guidedhacking.com/members/broihon.49430/) for Guided Hacking
-
-**This repo doesn't contain the compiled binaries, just the source code for the library. If you want the compiled program, you must be a paying customer on our website where you can download it. You do not have permission/license to distribute the compiled binaries or any of our other content from our website.**
-
 Release Downloads: [Register & Download DLL Injector Here ](https://guidedhacking.com/resources/guided-hacking-dll-injector.4/)
 
 ![](https://i.gyazo.com/23b497942ade7bc6a13b2d7029567c6b.png)
+
+**This repo doesn't contain the compiled binaries, just the source code for the library. If you want the compiled program, you must be a paying customer on our website where you can download it. You do not have permission/license to distribute the compiled binaries or any of our other content from our website.**
 
 **Injection Methods:**
 * LoadLibrary
@@ -17,10 +16,6 @@ Release Downloads: [Register & Download DLL Injector Here ](https://guidedhackin
 * Thread Hijacking
 * SetWindowsHookEx
 * QueueUserAPC
-
-**Bug Reports:**
-
-Post all bug reports & issues on the forum [here](https://guidedhacking.com/threads/guidedhacking-dll-injector.8417/)
 
 **Requirements**
 
