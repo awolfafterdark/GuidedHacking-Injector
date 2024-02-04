@@ -5,7 +5,7 @@ Developed by [Broihon](https://guidedhacking.com/members/broihon.49430/) for Gui
 It features five injection methods, six  shellcode execution methods and various additional options.
 Session separation can be bypassed with all methods.
 
-If you want to use this library with a GUI check out the [GH Injector GUI](https://github.com/Broihon/GH-Injector-GUI).
+If you want to use this library with a GUI check out the [GH Injector GUI](https://github.com/guided-hacking/GH-Injector-GUI).
 
 Release Downloads: [Register & Download DLL Injector Here ](https://guidedhacking.com/resources/guided-hacking-dll-injector.4/)
 
