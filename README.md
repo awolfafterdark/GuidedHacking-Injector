@@ -11,8 +11,6 @@ Release Downloads: [Register & Download DLL Injector Here ](https://guidedhackin
 
 ![](https://i.gyazo.com/23b497942ade7bc6a13b2d7029567c6b.png)
 
-**This repo doesn't contain the compiled binaries, just the source code for the library. If you want to download the compiled program, you must be a paying customer on our website where you can download it. If you can compile it yourself and get it working, then great, enjoy it, but you do not have permission/license to distribute the compiled binaries or any of our other content from our website.**
-
 ----
 
 ### Injection methods
@@ -55,6 +53,9 @@ Release Downloads: [Register & Download DLL Injector Here ](https://guidedhackin
 - Hook scanning/restoring
 
 ----
+
+### Where to download the compiled binaries?
+**This repo doesn't contain the compiled binaries, just the source code for the library. If you want to download the compiled program, you must be a paying customer on our website where you can download it. If you can compile it yourself and get it working, then great, enjoy it, but you do not have permission/license to distribute the compiled binaries or any of our other content from our website.**
 
 ### Getting started
 
