@@ -17,7 +17,8 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Build solution
-      run: msbuild GH\ Injector\ Library.sln /p:Configuration=Release /p:Platform="x64"
+      run: msbuild "GH Injector Library.sln" /p:Configuration=Release /p:Platform="x64"
+      shell: pwsh
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
