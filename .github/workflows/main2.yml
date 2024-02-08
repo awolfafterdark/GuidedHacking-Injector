@@ -1,0 +1,35 @@
+name: CI Build and Artifact Publish
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-publish:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.0.2
+      
+    - name: Build GH Injector Library Project
+      run: msbuild "GH Injector Library\GH Injector Library.vcxproj" /p:Configuration=Release /p:Platform="x64"
+      
+    - name: Build GH Injector SM Project
+      run: msbuild "GH Injector SM\GH Injector SM\GH Injector SM.vcxproj" /p:Configuration=Release /p:Platform="x64"
+      
+    # Add steps to build other projects as needed, excluding the problematic one
+    
+    # Optional: Publish Artifacts
+    - name: Publish Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Compiled-Binaries
+        path: |
+          GH Injector Library/Release/x64/*.dll
+          GH Injector SM/Release/x64/*.exe
+        # Adjust the paths according to where your build outputs are located
